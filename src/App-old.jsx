@@ -43,14 +43,14 @@ export default function App() {
         >
           <span className="nav-icon">◎</span> Citizen View
         </button>
-        <button
-            className={`nav-btn ${activeTab === 'admin' ? 'active' : ''} ${!isAdmin ? 'nav-btn-locked' : ''}`}
-            onClick={() => isAdmin ? setActiveTab('admin') : null}
-            title={!isAdmin ? 'Connect wallet to access Ward Admin panel' : ''}
-            style={{ opacity: isAdmin ? 1 : 0.4, cursor: isAdmin ? 'pointer' : 'not-allowed' }}
+        {isAdmin && (
+          <button
+            className={`nav-btn ${activeTab === 'admin' ? 'active' : ''}`}
+            onClick={() => setActiveTab('admin')}
           >
-            <span className="nav-icon">{isAdmin ? '◈' : '🔒'}</span> Ward Admin
+            <span className="nav-icon">◈</span> Ward Admin
           </button>
+        )}
       </nav>
 
       {/* Main Content */}

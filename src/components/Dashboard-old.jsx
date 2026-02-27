@@ -94,7 +94,7 @@ export default function Dashboard() {
                   <span className={getStatusBadgeClass(st)}>{st}</span>
                 </div>
                 <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontSize: 13, color: 'var(--accent)', fontWeight: 700 }}>{count} {count === 1 ? 'entry' : 'entries'}</div>
+                  <div style={{ fontSize: 13, color: 'var(--accent)', fontWeight: 700 }}>{count} entries</div>
                   <div style={{ fontSize: 11, color: 'var(--text3)' }}>{formatNPR(total)}</div>
                 </div>
               </div>
@@ -153,7 +153,7 @@ export default function Dashboard() {
                 <tr key={entry.id}>
                   <td style={{ color: 'var(--text3)', fontSize: 10 }}>{entry.id}</td>
                   <td>{entry.wardName}</td>
-                  <td className="title-cell" style={{ color: 'var(--text)' }}>{entry.title}</td>
+                  <td style={{ color: 'var(--text)', maxWidth: 220 }}>{entry.title}</td>
                   <td><span className="tag">{entry.category}</span></td>
                   <td className="amount-cell">{formatNPR(entry.amountNPR)}</td>
                   <td style={{ color: 'var(--yellow)' }}>{formatNPR(entry.spentNPR)}</td>
@@ -175,7 +175,6 @@ export default function Dashboard() {
                       target="_blank"
                       rel="noreferrer"
                       className="tx-link"
-                      title={entry.txSignature}
                     >
                       {entry.txSignature}
                     </a>

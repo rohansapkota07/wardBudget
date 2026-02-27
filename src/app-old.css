@@ -215,7 +215,6 @@ body {
   text-transform: uppercase;
   letter-spacing: 1px;
   font-weight: 700;
-  white-space: nowrap;
 }
 
 .badge-allocated  { background: rgba(92, 164, 255, 0.15); color: var(--blue); }
@@ -246,7 +245,6 @@ body {
   border-bottom: 1px solid var(--border);
   color: var(--text2);
   vertical-align: middle;
-  white-space: nowrap;
 }
 
 .data-table tr:hover td { background: var(--bg3); color: var(--text); }
@@ -255,19 +253,6 @@ body {
   font-family: var(--mono);
   color: var(--accent);
   font-weight: 700;
-  white-space: nowrap;
-}
-
-.data-table .title-cell {
-  white-space: normal;
-  max-width: 200px;
-}
-
-.tx-cell {
-  max-width: 110px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 /* Progress bar */
