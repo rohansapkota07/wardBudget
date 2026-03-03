@@ -1,11 +1,11 @@
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { Program, AnchorProvider, BN } from "@coral-xyz/anchor";
 import { PublicKey, SystemProgram } from "@solana/web3.js";
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import idl from "../idl/ward_budget.json";
 
 /* -------------------------------------------------- */
-/* 🔹 IMPORTANT: Replace with your deployed Program ID */
+/* 🔹 Replace with your deployed Program ID */
 /* -------------------------------------------------- */
 const PROGRAM_ID = new PublicKey(
   "3VPYrrEJbdGsDQFMqYvJGLst5pnyL8xpyrbYbZQTYfBM"
@@ -17,25 +17,23 @@ const PROGRAM_ID = new PublicKey(
 export function useProgram() {
   const { connection } = useConnection();
   const wallet = useWallet();
-const program = useMemo(() => {
-  if (!wallet?.publicKey) return null;
 
-  try {
-    const provider = new AnchorProvider(
-      connection,
-      wallet,
-      { commitment: "confirmed" }
-    );
+  const program = useMemo(() => {
+    if (!wallet?.publicKey) return null;
 
-    // ✅ Correct for IDL with "address" field
-   return new Program(idl, provider);
+    try {
+      const provider = new AnchorProvider(connection, wallet, {
+        commitment: "confirmed",
+      });
 
-  } catch (err) {
-    console.error("Program init failed:", err);
-    return null;
-  }
-}, [connection, wallet]);
-  
+      // ✅ Correct Program instantiation
+      return new Program(PROGRAM_ID, idl, provider);
+    } catch (err) {
+      console.error("Program init failed:", err);
+      return null;
+    }
+  }, [connection, wallet]);
+
   return { program, wallet, connection };
 }
 
@@ -53,11 +51,7 @@ export function getBudgetEntryPDA(entryId) {
 
 export function getFlagRecordPDA(entryId, citizenPubkey) {
   const [pda] = PublicKey.findProgramAddressSync(
-    [
-      Buffer.from("flag_record"),
-      Buffer.from(entryId),
-      citizenPubkey.toBuffer(),
-    ],
+    [Buffer.from("flag_record"), Buffer.from(entryId), citizenPubkey.toBuffer()],
     PROGRAM_ID
   );
   return pda;
@@ -65,11 +59,7 @@ export function getFlagRecordPDA(entryId, citizenPubkey) {
 
 export function getVoteRecordPDA(entryId, citizenPubkey) {
   const [pda] = PublicKey.findProgramAddressSync(
-    [
-      Buffer.from("vote_record"),
-      Buffer.from(entryId),
-      citizenPubkey.toBuffer(),
-    ],
+    [Buffer.from("vote_record"), Buffer.from(entryId), citizenPubkey.toBuffer()],
     PROGRAM_ID
   );
   return pda;
@@ -108,6 +98,46 @@ export async function fetchAllEntries(program) {
 }
 
 /* ================================================== */
+/* 🔹 Live subscription hook */
+/* ================================================== */
+
+export function useAllEntries(program) {
+  const [entries, setEntries] = useState([]);
+
+  useEffect(() => {
+    if (!program) return;
+
+    let isMounted = true;
+
+    // Initial fetch
+    const fetchData = async () => {
+      const data = await fetchAllEntries(program);
+      if (isMounted) setEntries(data);
+    };
+    fetchData();
+
+    // Subscribe to updates for budgetEntry accounts
+    const listener = program.account.budgetEntry.subscribe((updatedAccount, publicKey) => {
+      setEntries(prev =>
+        prev.map(e =>
+          e.pubkey === publicKey.toString()
+            ? { ...e, ...updatedAccount }
+            : e
+        )
+      );
+    });
+
+    return () => {
+      isMounted = false;
+      // Unsubscribe on cleanup
+      if (listener) listener.unsubscribe();
+    };
+  }, [program]);
+
+  return entries;
+}
+
+/* ================================================== */
 /* 🔹 Status Helpers */
 /* ================================================== */
 
@@ -137,5 +167,4 @@ export function statusToArg(statusStr) {
 /* ================================================== */
 /* 🔹 Re-exports */
 /* ================================================== */
-
 export { BN, SystemProgram };
