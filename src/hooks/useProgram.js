@@ -27,7 +27,7 @@ export function useProgram() {
       });
 
       // ✅ Correct Program instantiation
-      return new Program(PROGRAM_ID, idl, provider);
+      return new Program(idl, PROGRAM_ID, provider); // ✅
     } catch (err) {
       console.error("Program init failed:", err);
       return null;
