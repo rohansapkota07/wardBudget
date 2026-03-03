@@ -1,0 +1,624 @@
+{
+  "address": "3VPYrrEJbdGsDQFMqYvJGLst5pnyL8xpyrbYbZQTYfBM",
+  "metadata": {
+    "name": "ward_budget",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "add_budget_entry",
+      "discriminator": [
+        163,
+        84,
+        20,
+        8,
+        69,
+        243,
+        20,
+        183
+      ],
+      "accounts": [
+        {
+          "name": "budget_entry",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  117,
+                  100,
+                  103,
+                  101,
+                  116,
+                  95,
+                  101,
+                  110,
+                  116,
+                  114,
+                  121
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "entry_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "entry_id",
+          "type": "string"
+        },
+        {
+          "name": "ward_id",
+          "type": "u8"
+        },
+        {
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "name": "category",
+          "type": "string"
+        },
+        {
+          "name": "amount_npr",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "flag_entry",
+      "discriminator": [
+        22,
+        215,
+        197,
+        33,
+        183,
+        37,
+        16,
+        154
+      ],
+      "accounts": [
+        {
+          "name": "budget_entry",
+          "writable": true
+        },
+        {
+          "name": "flag_record",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  108,
+                  97,
+                  103,
+                  95,
+                  114,
+                  101,
+                  99,
+                  111,
+                  114,
+                  100
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "budget_entry.entry_id",
+                "account": "BudgetEntry"
+              },
+              {
+                "kind": "account",
+                "path": "citizen"
+              }
+            ]
+          }
+        },
+        {
+          "name": "citizen",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "update_budget_entry",
+      "discriminator": [
+        24,
+        191,
+        6,
+        46,
+        113,
+        184,
+        1,
+        248
+      ],
+      "accounts": [
+        {
+          "name": "budget_entry",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "new_status",
+          "type": {
+            "defined": {
+              "name": "BudgetStatus"
+            }
+          }
+        },
+        {
+          "name": "spent_npr",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "vote_entry",
+      "discriminator": [
+        153,
+        149,
+        139,
+        2,
+        39,
+        46,
+        186,
+        44
+      ],
+      "accounts": [
+        {
+          "name": "budget_entry",
+          "writable": true
+        },
+        {
+          "name": "vote_record",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  111,
+                  116,
+                  101,
+                  95,
+                  114,
+                  101,
+                  99,
+                  111,
+                  114,
+                  100
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "budget_entry.entry_id",
+                "account": "BudgetEntry"
+              },
+              {
+                "kind": "account",
+                "path": "citizen"
+              }
+            ]
+          }
+        },
+        {
+          "name": "citizen",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "vote_type",
+          "type": {
+            "defined": {
+              "name": "VoteType"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "BudgetEntry",
+      "discriminator": [
+        111,
+        181,
+        168,
+        148,
+        107,
+        239,
+        8,
+        25
+      ]
+    },
+    {
+      "name": "CitizenFlagRecord",
+      "discriminator": [
+        74,
+        53,
+        149,
+        85,
+        247,
+        132,
+        208,
+        19
+      ]
+    },
+    {
+      "name": "VoteRecord",
+      "discriminator": [
+        112,
+        9,
+        123,
+        165,
+        234,
+        9,
+        157,
+        167
+      ]
+    }
+  ],
+  "events": [
+    {
+      "name": "EntryFlagged",
+      "discriminator": [
+        99,
+        196,
+        160,
+        81,
+        74,
+        52,
+        148,
+        78
+      ]
+    },
+    {
+      "name": "EntryPosted",
+      "discriminator": [
+        73,
+        120,
+        24,
+        76,
+        206,
+        167,
+        36,
+        214
+      ]
+    },
+    {
+      "name": "EntryVoted",
+      "discriminator": [
+        137,
+        41,
+        73,
+        229,
+        2,
+        104,
+        227,
+        92
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "TitleTooLong",
+      "msg": "Title must be 120 characters or fewer."
+    },
+    {
+      "code": 6001,
+      "name": "DescTooLong",
+      "msg": "Description must be 500 characters or fewer."
+    },
+    {
+      "code": 6002,
+      "name": "InvalidAmount",
+      "msg": "Amount must be greater than zero."
+    },
+    {
+      "code": 6003,
+      "name": "IdTooLong",
+      "msg": "Entry ID must be 16 characters or fewer."
+    },
+    {
+      "code": 6004,
+      "name": "Unauthorized",
+      "msg": "Only the posting authority can update."
+    },
+    {
+      "code": 6005,
+      "name": "SpentExceedsAllocated",
+      "msg": "Spent cannot exceed allocated."
+    },
+    {
+      "code": 6006,
+      "name": "AlreadyFlagged",
+      "msg": "You have already flagged this entry."
+    },
+    {
+      "code": 6007,
+      "name": "AlreadyVoted",
+      "msg": "You have already voted on this entry."
+    }
+  ],
+  "types": [
+    {
+      "name": "BudgetEntry",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "entry_id",
+            "type": "string"
+          },
+          {
+            "name": "ward_id",
+            "type": "u8"
+          },
+          {
+            "name": "title",
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "type": "string"
+          },
+          {
+            "name": "category",
+            "type": "string"
+          },
+          {
+            "name": "amount_npr",
+            "type": "u64"
+          },
+          {
+            "name": "spent_npr",
+            "type": "u64"
+          },
+          {
+            "name": "status",
+            "type": {
+              "defined": {
+                "name": "BudgetStatus"
+              }
+            }
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          },
+          {
+            "name": "flags",
+            "type": "u16"
+          },
+          {
+            "name": "support_votes",
+            "type": "u16"
+          },
+          {
+            "name": "oppose_votes",
+            "type": "u16"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "BudgetStatus",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Allocated"
+          },
+          {
+            "name": "InProgress"
+          },
+          {
+            "name": "Completed"
+          },
+          {
+            "name": "Flagged"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CitizenFlagRecord",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "citizen",
+            "type": "pubkey"
+          },
+          {
+            "name": "entry_id",
+            "type": "string"
+          },
+          {
+            "name": "has_flagged",
+            "type": "bool"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "EntryFlagged",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "entry_id",
+            "type": "string"
+          },
+          {
+            "name": "citizen",
+            "type": "pubkey"
+          },
+          {
+            "name": "total_flags",
+            "type": "u16"
+          }
+        ]
+      }
+    },
+    {
+      "name": "EntryPosted",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "entry_id",
+            "type": "string"
+          },
+          {
+            "name": "ward_id",
+            "type": "u8"
+          },
+          {
+            "name": "title",
+            "type": "string"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "EntryVoted",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "entry_id",
+            "type": "string"
+          },
+          {
+            "name": "citizen",
+            "type": "pubkey"
+          },
+          {
+            "name": "vote_type",
+            "type": {
+              "defined": {
+                "name": "VoteType"
+              }
+            }
+          },
+          {
+            "name": "support_votes",
+            "type": "u16"
+          },
+          {
+            "name": "oppose_votes",
+            "type": "u16"
+          }
+        ]
+      }
+    },
+    {
+      "name": "VoteRecord",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "citizen",
+            "type": "pubkey"
+          },
+          {
+            "name": "entry_id",
+            "type": "string"
+          },
+          {
+            "name": "has_voted",
+            "type": "bool"
+          },
+          {
+            "name": "vote_type",
+            "type": {
+              "defined": {
+                "name": "VoteType"
+              }
+            }
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "VoteType",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Support"
+          },
+          {
+            "name": "Oppose"
+          }
+        ]
+      }
+    }
+  ]
+}
